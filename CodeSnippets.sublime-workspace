@@ -1,0 +1,547 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"sample",
+				"sampleOperation1"
+			],
+			[
+				"class",
+				"classAdapter"
+			],
+			[
+				"samp",
+				"sampleOperation1"
+			],
+			[
+				"name",
+				"namespace"
+			],
+			[
+				"nam",
+				"namespace"
+			],
+			[
+				"pro",
+				"prototype"
+			],
+			[
+				"in",
+				"instance"
+			],
+			[
+				"cla",
+				"class"
+			],
+			[
+				"ab",
+				"abstract"
+			],
+			[
+				"step",
+				"step1"
+			],
+			[
+				"do",
+				"doOperation2"
+			],
+			[
+				"doO",
+				"doOperation2"
+			],
+			[
+				"re",
+				"recommend"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "Java/FunctionalProgramming.java",
+			"settings":
+			{
+				"buffer_size": 2741,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Java/Java Design Pattern/Ch.21.Template_Method.java",
+			"settings":
+			{
+				"buffer_size": 1608,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Java/Java Design Pattern/Strategy.java",
+			"settings":
+			{
+				"buffer_size": 1637,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Java/Java与模式/Ch.12.Simple_Factory.java",
+			"settings":
+			{
+				"buffer_size": 271,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Java/Java与模式/ch.36.Template_Method.java",
+			"settings":
+			{
+				"buffer_size": 1698,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "/**\n ==  类的适配器模式 ==\n */\n/**\n #Code list 1: Target的源代码\n */\n package com.javapatterns.adapter.classAdapter;\n public interface Target{\n 	// 源类也有的方法\n 	void sampleOperation1();\n 	// 源类没有的方法\n 	void sampleOperation2();\n}\n/**\n #Code list 2: Adaptee的源代码\n */\npackage com.javapatterns.adapter.classAdapter;\npublic class Adaptee{\n	// 源类含有方法sampleOperation1()\n	public void sampleOperation1(){}\n}\n/**\n #Code list 3: Adapter的源代码\n 适配器角色Adapter扩展了Adaptee，同时又实现了目标接口(Target);由于源类(Adaptee)没有提供sampleOperation2()这个方法, \n 而目标接口又要求这个方法，因此适配器Adapter实现了这个方法\n */\npackage com.javapatterns.adapter.classAdapter;\npublic class Adapter extends Adaptee implements Target{\n	public void sampleOperation2(){\n		// write your code here\n	}\n}\n/**\n == 对象的适配器模式 ==\n */\npackage com.javapatterns.adapter;\npublic class Adapter implements Target{\n	private Adaptee adaptee;\n	public Adapter(Adaptee adaptee){\n		super();\n		this.adaptee = adaptee;\n	}\n	// 源类的方法直接委派\n	public void sampleOperation1(){\n		adaptee.sampleOperation1();\n	}\n	// \n}",
+			"file": "Java/Java与模式/Ch.22.Adapter.java",
+			"file_size": 0,
+			"file_write_time": 131111276730000000,
+			"settings":
+			{
+				"buffer_size": 988,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "/**\n 4.1 单例模式的基本实现\n */\nvar Singleton = function(name){\n    this.name = name;\n    this.instance = null;\n};\n\nSingleton.prototype.getName = function(){\n    alert(this.name);\n};\n\nSingleton.getInstance = function(name){\n    if(!this.instance){\n    	this.instance = new Singleton(name);\n    }\n    return this.instance;\n};\n\nvar a = Singleton.getInstance('sven1');\nvar b = Singleton.getInstance('sven2');\nalert (a === b); // true\n\n/**\n 4.2 透明的单例模式\n\n 使用自执行的匿名函数和闭包，用instance结合闭包来保存实例\n */\nvar CreateDiv = (function(){\n	var instance;\n	var CreateDiv = function(html){\n		if(instance){\n			return instance;\n		}\n		this.html = html;\n		this.init();\n		return instance = this;\n	};\n\n	CreateDiv.prototype.init = function(){\n		var div = document.createElement('div');\n		div.innerHTML = this.html;\n		document.body.appendChild(div);\n	};\n\n	return CreateDiv;\n})();\n\nvar a = new CreateDiv('sven1');\nvar b = new CreateDiv('sven2');\n\nalert(a === b);\n\n/**\n 4.3 用代理模式实现单例模式\n */\nvar CreateDiv = function(html){\n	this.html = html;\n	this.init();\n}\n\nCreateDiv.prototype.init = function(){\n	var div = document.createElement('div');\n	div.innerHTML = this.html;\n	document.body.appendChild(div);\n}\n// 代理构造器函数，将CreateDiv的单例构造单独出来\nvar ProxySingletonCreateDiv = (function(){\n	var instance;\n	return function(html){\n		if(!instance){\n			instance = new CreateDiv(html);\n		}\n		return instance;\n	}\n})();\n\nvar a = new ProxySingletonCreateDiv('sven1');\nvar b = new ProxySingletonCreateDiv('sven2');\n\nalert(a === b);\n/**\n 4.4 JavaScript中的单例模式\n 4.1-4.3的例子都是机遇以类为中心思想的\n */\n\n // 利用全局变量当成单例模式；容易造成命名空间污染\nvar a = {};\n\n/**\n 4.4.1 使用命名空间较少全局变量的使用\n */\nvar namespace1 = {\n	a: function(){\n		alert(1);\n	},\n	b: function(){\n		alert(2);\n	}\n}\n// 动态创建命名空间\nvar MyApp = {};\nMyApp.namespace = function(name){\n	var parts = name.split('.');\n	var current = MyApp;\n	for (var i in parts){\n		if(!current[parts[i]]){\n			current[parts[i]] = {};\n		}\n		current = current[parts[i]];\n	}\n};\n\nMyApp.namespace('event');\nMyApp.namespace('dom.style');\nconsole.dir(MyApp);\n\n//上述代码等价于\nvar MyApp = {\n	event: {},\n	dom: {\n		style: {}\n	}\n};\n\n/**\n 4.4.2 使用闭包封装私有变量\n */\nvar user = (function(){\n	var __name = 'sven',\n		__age = 29;\n\n	return {\n		getUserInfo: function(){\n			return __name + '-' + __age;\n		}\n	}\n})();\n\n/**\n 4.5 惰性单例\n */\nSingleton.getInstance = (function(){\n	var instance = null;\n	return function(name){\n		if(!instance){\n			instance = new Singleton(name);\n		}\n		return instance;\n	}\n})();",
+			"file": "JS/JavaScript设计模式与开发实践/ch.4_Singleton.js",
+			"file_size": 259,
+			"file_write_time": 131106840980000000,
+			"settings":
+			{
+				"buffer_size": 2402,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "JS/JavaScript Design Pattern/Encapsulation.js",
+			"settings":
+			{
+				"buffer_size": 5132,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 392.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"setSja",
+				"Set Syntax: Java"
+			],
+			[
+				"console",
+				"Set Syntax: R Console"
+			]
+		],
+		"width": 449.0
+	},
+	"console":
+	{
+		"height": 126.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = '2915d1851351e5ee549c20394736b442' + '8bc59f460fa1548d1514676163dafc88'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/Users/jimmyd/Projects/CodeSnippets/CodeSnippets",
+		"/Users/jimmyd/Projects/CodeSnippets/CodeSnippets/Java",
+		"/Users/jimmyd/Projects/CodeSnippets/CodeSnippets/Java/Java与模式",
+		"/Users/jimmyd/Projects/CodeSnippets/CodeSnippets/Java/Java Design Pattern",
+		"/Users/jimmyd/Projects/CodeSnippets/CodeSnippets/JS",
+		"/Users/jimmyd/Projects/CodeSnippets/CodeSnippets/JS/JavaScript设计模式与开发实践",
+		"/Users/jimmyd/Projects/CodeSnippets/CodeSnippets/JS/JavaScript Design Pattern"
+	],
+	"file_history":
+	[
+		"/Users/jimmyd/Desktop/QRCodeUtil.java",
+		"/Users/jimmyd/Desktop/struts_shakearound.xml",
+		"/Users/jimmyd/Downloads/ShakeAction.action",
+		"/Users/jimmyd/Projects/idea_project/webim-dsj/WebContent/web/shakearound/mobile/js/test.js",
+		"/usr/local/etc/nginx/nginx.conf",
+		"/Users/jimmyd/Projects/idea_project/svn/LyWxMarketingProject/WebContent/Login.jsp",
+		"/Users/jimmyd/Projects/idea_project/svn/LyWxMarketingProject/WebContent",
+		"/Users/jimmyd/Projects/wp_dev/webim/src/com/ly/app/survery/bean/QRCodeUtil.java",
+		"/Users/jimmyd/Documents/tmp/QRCodeUtil.java",
+		"/Users/jimmyd/Projects/wp_dev/webim/src/com/ly/app/Tools/QRCodeUtil.java"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 93.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 5,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "Java/FunctionalProgramming.java",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2741,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2616,
+								2616
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Java/Java.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 946.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "Java/Java Design Pattern/Ch.21.Template_Method.java",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1608,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								709,
+								709
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Java/Java.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "Java/Java Design Pattern/Strategy.java",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1637,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								837,
+								837
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Java/Java.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 271.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "Java/Java与模式/Ch.12.Simple_Factory.java",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 271,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								266,
+								266
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Java/Java.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "Java/Java与模式/ch.36.Template_Method.java",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1698,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								209,
+								209
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Java/Java.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "Java/Java与模式/Ch.22.Adapter.java",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 988,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								295,
+								295
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Java/Java.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "JS/JavaScript设计模式与开发实践/ch.4_Singleton.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2402,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2402,
+								2402
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "JS/JavaScript Design Pattern/Encapsulation.js",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 5132,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5123,
+								5123
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 2356.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 23.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "CodeSnippets.sublime-project",
+	"replace":
+	{
+		"height": 42.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 264.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
